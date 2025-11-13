@@ -19,6 +19,38 @@
                 <h1 class="display-4">Hello world! This is our AI Event Scheduler app.</h1>
             </div>
         </div>
+
+        <div class="row mt-5">
+            <div class="col">
+                <h2 class="mb-4">Here's some fake user data from our postgres database:</h2>
+                {% if users %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Google Account</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.firstname }}</td>
+                                <td>{{ user.lastname }}</td>
+                                <td>{{ user.google_account }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info" role="alert">
+                    No users found in the database. Please run the create_fake_users.py script to add sample data.
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </main>
 </body>
 
