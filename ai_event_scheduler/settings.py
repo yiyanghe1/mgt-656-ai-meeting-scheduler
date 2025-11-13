@@ -25,6 +25,7 @@ ALLOWED_HOSTS = ['ai-event-scheduler-staging.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'homepage.apps.HomepageConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

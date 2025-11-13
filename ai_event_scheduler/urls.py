@@ -3,6 +3,7 @@ URL configuration for the ai_event_scheduler project.
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import include
 from django.http import HttpResponse
 
 def hello_world(request):
@@ -11,7 +12,7 @@ def hello_world(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', hello_world),
+    path('', include('homepage.urls')),
 ]
 
 
