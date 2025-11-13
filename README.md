@@ -39,3 +39,7 @@ For the first sprint, we've set up a simple Django application that connects to 
 Follow the instructions at 'https://render.com/docs/deploy-django' to deploy the project to our staging environment.
 
 All necessary dependencies should be included in the requirements.txt file
+
+### View the staging app here
+
+https://ai-event-scheduler-staging.onrender.com
