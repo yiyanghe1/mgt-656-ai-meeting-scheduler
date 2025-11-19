@@ -6,17 +6,55 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Hello Django on Render!</title>
+    <title>AI Event Scheduler - Smart Meeting Planning</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">AI Event Scheduler</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white ml-2" href="{% url 'signup' %}">Sign Up</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
     <main class="container">
-        <div class="row text-center justify-content-center">
-            <div class="col">
-                <h1 class="display-4">Hello world! This is our AI Event Scheduler app.</h1>
+        <div class="row text-center justify-content-center mt-5">
+            <div class="col-md-8">
+                <h1 class="display-4">Welcome to AI Event Scheduler</h1>
+                <p class="lead">Smart meeting planning made simple. Find the perfect time for everyone.</p>
+                
+                {% if not user.is_authenticated %}
+                    <div class="mt-4">
+                        <a href="{% url 'signup' %}" class="btn btn-lg btn-primary mr-2">Get Started</a>
+                        <a href="{% url 'login' %}" class="btn btn-lg btn-outline-primary">Login</a>
+                    </div>
+                {% else %}
+                    <div class="mt-4">
+                        <a href="{% url 'dashboard' %}" class="btn btn-lg btn-primary">Go to Dashboard</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
 

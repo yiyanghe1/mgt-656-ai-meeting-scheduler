@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Event Scheduler</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'dashboard' %}">AI Event Scheduler</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <span class="navbar-text mr-3">Welcome, {{ user.username }}!</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>My Meeting Requests</h1>
+                <hr>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <div class="mb-3">
+                    <a href="{% url 'create_meeting' %}" class="btn btn-primary">Create New Meeting Request</a>
+                </div>
+                
+                {% if meetings %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Created</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for meeting in meetings %}
+                                    <tr>
+                                        <td>{{ meeting.title }}</td>
+                                        <td>{{ meeting.description|default:"No description" }}</td>
+                                        <td>{{ meeting.created_at|date:"Y-m-d H:i" }}</td>
+                                        <td>
+                                            {% if meeting.has_selected_time %}
+                                                <span class="badge badge-success">Time Selected</span>
+                                            {% else %}
+                                                <span class="badge badge-warning">Pending</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'meeting_detail' pk=meeting.pk %}" class="btn btn-sm btn-info">View Details</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p class="mb-0">You haven't created any meeting requests yet. <a href="{% url 'create_meeting' %}">Create your first meeting request</a> to get started!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

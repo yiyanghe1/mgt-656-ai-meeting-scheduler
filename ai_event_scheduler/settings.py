@@ -19,13 +19,14 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ai-event-scheduler-staging.onrender.com']
+ALLOWED_HOSTS = ['ai-event-scheduler-staging.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
+    'scheduler.apps.SchedulerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,6 +129,11 @@ if not DEBUG:
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Authentication settings
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 
