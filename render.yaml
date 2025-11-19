@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: mgt-656-ai-meeting-scheduler
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn ai_event_scheduler.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 2
