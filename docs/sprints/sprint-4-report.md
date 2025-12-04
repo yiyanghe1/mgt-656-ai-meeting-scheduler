@@ -84,8 +84,8 @@ Action items underway: Harden OAuth refresh handling; raise test coverage; final
 Sprint 4 Planning Doc: ./sprint-4-planning.md
 Sprint 4 Review Doc: ./sprint-4-review.md
 Sprint 4 Retrospective Doc: ./sprint-4-retrospective.md
-GitHub Project Board: <URL>
-Staging URL: <https://staging.example>
-Production URL: <https://prod.example>
-A/B Test Endpoint: <https://prod.example/ab-test>
+GitHub Project Board: <https://github.com/yiyanghe1/mgt-656-ai-meeting-scheduler>
+Staging URL: <https://ai-event-scheduler-staging.onrender.com/>
+Production URL: <https://ai-event-scheduler-prod.onrender.com/>
+A/B Test Endpoint: <https://ai-event-scheduler-prod.onrender.com/90a2091/>
 Analytics Dashboard: <URL>

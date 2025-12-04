@@ -13,7 +13,7 @@ def index(request):
     return render(request, 'render/index.html', context)
 
 TEAM_NICKNAMES = [
-    'Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo'
+    'jolly-bat', 'splendid-jellyfish', 'Charlie', 'Delta', 'Echo'
 ]
 
 def coffee_abtest(request):
