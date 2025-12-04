@@ -5,9 +5,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.http import JsonResponse
 from django.shortcuts import redirect
-from django.utils import timezone as dj_timezone
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
 from scheduler.auth_views import SignUpView, CustomLoginView, CustomLogoutView
 
 def health_check(request):
