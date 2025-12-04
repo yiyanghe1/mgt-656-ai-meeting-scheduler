@@ -83,3 +83,44 @@ All necessary dependencies should be included in the requirements.txt file
 ### View the staging app here
 
 https://ai-event-scheduler-staging.onrender.com
+
+# Meeting Scheduler
+
+## Deployment
+Prerequisites:
+- Runtime: Node.js 20, Python 3.11, or Go 1.22 depending on the project parts.
+- Backing services configured via environment variables (see .env.example).
+
+Steps:
+1. Copy .env.example to .env and set values.
+2. Install dependencies:
+   - Node: npm ci
+   - Python: pip install -r requirements.txt or pip install .
+   - Go: go mod download
+3. Run migrations or setup scripts if applicable.
+4. Start:
+   - Node: PORT=${PORT:-3000} npm start
+   - Python: PORT=${PORT:-8000} python -m your_app
+   - Go: PORT=${PORT:-8080} go run ./cmd/your_app
+5. Logs are written to stdout/stderr. Use your platform log collector.
+
+## Testing
+- Node: npm test
+- Python: pytest
+- Go: go test ./...
+
+## Linting
+- Node: npm run lint (configure eslint)
+- Python: flake8 .
+- Go: golangci-lint run
+
+## 12-Factor Notes
+- Config: only via environment variables, never hardcoded.
+- Dependencies: declared in manifest (package.json, pyproject.toml/requirements.txt, go.mod) and lockfiles where applicable.
+- Backing services: connect via URLs in env (e.g., DATABASE_URL, REDIS_URL).
+- Build, release, run: separate; use CI/CD to build and deploy.
+- Stateless processes: store state in external services.
+- Port binding: respect PORT env var.
+- Concurrency: scale via processes/instances.
+- Logs: write to stdout/stderr.
+- Admin tasks: run as one-off processes using the same codebase.

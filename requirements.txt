@@ -6,6 +6,9 @@ brotli>=1.2.0
 gunicorn>=23.0.0
 uvicorn>=0.38.0
 flake8>=6.0.0
+google-api-python-client>=2.147.0
+google-auth>=2.35.0
+google-auth-oauthlib>=1.2.1
 
 
 

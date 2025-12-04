@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 </head>
 <body>
+    {% load tz %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'dashboard' %}">AI Event Scheduler</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,6 +20,21 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% get_current_timezone as CURRENT_TZ %}
+                <li class="nav-item">
+                    <form method="post" action="{% url 'set_timezone' %}" class="form-inline ml-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <select name="timezone" class="custom-select custom-select-sm" onchange="this.form.submit()">
+                            <option value="UTC" {% if CURRENT_TZ == 'UTC' %}selected{% endif %}>UTC</option>
+                            <option value="America/New_York" {% if CURRENT_TZ == 'America/New_York' %}selected{% endif %}>US/Eastern</option>
+                            <option value="America/Chicago" {% if CURRENT_TZ == 'America/Chicago' %}selected{% endif %}>US/Central</option>
+                            <option value="America/Denver" {% if CURRENT_TZ == 'America/Denver' %}selected{% endif %}>US/Mountain</option>
+                            <option value="America/Los_Angeles" {% if CURRENT_TZ == 'America/Los_Angeles' %}selected{% endif %}>US/Pacific</option>
+                            <option value="Europe/London" {% if CURRENT_TZ == 'Europe/London' %}selected{% endif %}>Europe/London</option>
+                        </select>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -62,7 +78,7 @@
                                     <tr>
                                         <td>{{ meeting.title }}</td>
                                         <td>{{ meeting.description|default:"No description" }}</td>
-                                        <td>{{ meeting.created_at|date:"Y-m-d H:i" }}</td>
+                                        <td>{{ meeting.created_at|localtime|date:"Y-m-d H:i" }}</td>
                                         <td>
                                             {% if meeting.has_selected_time %}
                                                 <span class="badge badge-success">Time Selected</span>
@@ -72,6 +88,10 @@
                                         </td>
                                         <td>
                                             <a href="{% url 'meeting_detail' pk=meeting.pk %}" class="btn btn-sm btn-info">View Details</a>
+                                            <form method="post" action="{% url 'delete_meeting' pk=meeting.pk %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this meeting? This cannot be undone.');">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 {% endfor %}

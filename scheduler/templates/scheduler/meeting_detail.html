@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 </head>
 <body>
+    {% load tz %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'dashboard' %}">AI Event Scheduler</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +23,20 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <form method="post" action="{% url 'set_timezone' %}" class="form-inline ml-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <select name="timezone" class="custom-select custom-select-sm" onchange="this.form.submit()">
+                            <option value="UTC" {% if CURRENT_TZ == 'UTC' %}selected{% endif %}>UTC</option>
+                            <option value="America/New_York" {% if CURRENT_TZ == 'America/New_York' %}selected{% endif %}>US/Eastern</option>
+                            <option value="America/Chicago" {% if CURRENT_TZ == 'America/Chicago' %}selected{% endif %}>US/Central</option>
+                            <option value="America/Denver" {% if CURRENT_TZ == 'America/Denver' %}selected{% endif %}>US/Mountain</option>
+                            <option value="America/Los_Angeles" {% if CURRENT_TZ == 'America/Los_Angeles' %}selected{% endif %}>US/Pacific</option>
+                            <option value="Europe/London" {% if CURRENT_TZ == 'Europe/London' %}selected{% endif %}>Europe/London</option>
+                        </select>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -44,6 +59,18 @@
                     {% endfor %}
                 {% endif %}
                 
+                {% if google_connected %}
+                    <div class="alert alert-success">
+                        Google Calendar is connected.
+                        <a class="ml-2" href="{% url 'google_disconnect' %}?next={{ request.path }}">Disconnect</a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        Google Calendar is not connected.
+                        <a class="ml-2" href="{% url 'google_connect' %}?next={{ request.path }}">Connect now</a>
+                    </div>
+                {% endif %}
+                
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Meeting Details</h5>
@@ -56,8 +83,8 @@
                         {% if meeting.has_selected_time %}
                             <div class="alert alert-success mt-3">
                                 <strong>Selected Time:</strong> 
-                                {{ meeting.selected_time.start_time|date:"F d, Y H:i" }} - 
-                                {{ meeting.selected_time.end_time|date:"H:i" }}
+                                {{ meeting.selected_time.start_time|localtime|date:"F d, Y H:i" }} - 
+                                {{ meeting.selected_time.end_time|localtime|date:"H:i" }}
                                 ({{ meeting.selected_time.duration_minutes }} minutes)
                             </div>
                         {% endif %}
@@ -78,10 +105,10 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div>
                                                     <h6 class="mb-1">
-                                                        {{ time_option.start_time|date:"F d, Y" }}
+                                                        {{ time_option.start_time|localtime|date:"F d, Y" }}
                                                     </h6>
                                                     <p class="mb-1">
-                                                        {{ time_option.start_time|date:"H:i" }} - {{ time_option.end_time|date:"H:i" }}
+                                                        {{ time_option.start_time|localtime|date:"H:i" }} - {{ time_option.end_time|localtime|date:"H:i" }}
                                                         <span class="badge badge-secondary">{{ time_option.duration_minutes }} minutes</span>
                                                     </p>
                                                 </div>
@@ -113,6 +140,10 @@
                 
                 <div class="mt-3">
                     <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+                    <form method="post" action="{% url 'delete_meeting' pk=meeting.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this meeting? This cannot be undone.');">Delete Meeting</button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -60,3 +60,21 @@ class TimeOption(models.Model):
         """Calculate duration in minutes."""
         delta = self.end_time - self.start_time
         return int(delta.total_seconds() / 60)
+
+
+class GoogleOAuthCredential(models.Model):
+    """Per-user Google OAuth credential storage."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='google_oauth')
+    token = models.TextField()
+    refresh_token = models.TextField(blank=True, null=True)
+    token_uri = models.CharField(max_length=255, default='https://oauth2.googleapis.com/token')
+    scopes = models.TextField(blank=True, default='')  # space-separated
+    expiry = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'google_oauth_credentials'
+
+    def __str__(self):
+        return f"Google OAuth for {self.user.username}"
