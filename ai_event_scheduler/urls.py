@@ -4,12 +4,38 @@ URL configuration for the ai_event_scheduler project.
 from django.contrib import admin
 from django.urls import path, include
 from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.utils import timezone as dj_timezone
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from scheduler.auth_views import SignUpView, CustomLoginView, CustomLogoutView
-from django.views.i18n import set_timezone  # ADD
 
 def health_check(request):
     """Simple health check endpoint for monitoring."""
     return JsonResponse({'status': 'healthy', 'service': 'ai-event-scheduler'})
+
+@require_POST
+def set_timezone(request):
+    """
+    Set the timezone for the current session.
+    This view stores the timezone in the session, which is then used by TimezoneMiddleware.
+    """
+    next_url = request.POST.get('next', '/')
+    timezone_str = request.POST.get('timezone')
+    
+    if timezone_str:
+        # Validate timezone by trying to create a ZoneInfo object
+        try:
+            from zoneinfo import ZoneInfo
+            # This will raise an exception if the timezone is invalid
+            ZoneInfo(timezone_str)
+            # Store in session for TimezoneMiddleware
+            request.session['django_timezone'] = timezone_str
+        except Exception:
+            # If timezone is invalid, just keep the current one
+            pass
+    
+    return redirect(next_url)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -21,6 +47,3 @@ urlpatterns = [
     path('logout/', CustomLogoutView.as_view(), name='logout'),
     path('', include('scheduler.urls')),
 ]
-
-
-
